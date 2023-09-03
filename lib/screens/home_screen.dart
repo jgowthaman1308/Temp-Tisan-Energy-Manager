@@ -14,18 +14,18 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Device> _deviceList = Device.getDeviceList();
 
-  late List<BarChartData> data;
+  //late List<BarChartData> data;
   late TooltipBehavior _tooltip;
 
   @override
   void initState() {
-    data = [
-      BarChartData('CHN', 12),
-      BarChartData('GER', 15),
-      BarChartData('RUS', 30),
-      BarChartData('BRZ', 6.4),
-      BarChartData('IND', 14)
-    ];
+    // data = [
+    //   BarChartData('CHN', 12),
+    //   BarChartData('GER', 15),
+    //   BarChartData('RUS', 30),
+    //   BarChartData('BRZ', 6.4),
+    //   BarChartData('IND', 14)
+    // ];
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
   }
@@ -81,20 +81,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _getHome() {
+  Widget _getUsage() {
     return Center(
       child: SfCartesianChart(
-        // Initialize category axis
-        primaryXAxis: CategoryAxis(),
+        primaryXAxis: CategoryAxis(
+          title: AxisTitle(text: ''),
+        ),
+        primaryYAxis: NumericAxis(
+          minimum: 0,
+          maximum: 400,
+          interval: 10,
+          title: AxisTitle(text: 'Kwh'),
+        ),
         series: <LineSeries<EnergyData, String>>[
           LineSeries<EnergyData, String>(
             // Bind data source
             dataSource: <EnergyData>[
-              EnergyData('Jan', 35),
-              EnergyData('Feb', 28),
-              EnergyData('Mar', 34),
-              EnergyData('Apr', 32),
-              EnergyData('May', 40)
+              EnergyData('Jan', 120),
+              EnergyData('Feb', 190),
+              EnergyData('Mar', 200),
+              EnergyData('Apr', 170),
+              EnergyData('May', 250)
             ],
             xValueMapper: (EnergyData sales, _) => sales.month,
             yValueMapper: (EnergyData sales, _) => sales.units,
@@ -106,15 +113,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _getDeviceUsage() {
     return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
-      primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
+      primaryXAxis: CategoryAxis(
+        title: AxisTitle(text: 'Appliances'),
+      ),
+      primaryYAxis: NumericAxis(
+        minimum: 0,
+        maximum: 100,
+        interval: 10,
+        title: AxisTitle(text: 'Kwh'),
+      ),
       tooltipBehavior: _tooltip,
-      series: <ChartSeries<BarChartData, String>>[
-        BarSeries<BarChartData, String>(
-          dataSource: data,
-          xValueMapper: (BarChartData data, _) => data.x,
-          yValueMapper: (BarChartData data, _) => data.y,
-          name: 'Gold',
+      series: <ChartSeries<Device, String>>[
+        BarSeries<Device, String>(
+          dataSource: _deviceList,
+          xValueMapper: (Device data, _) => data.name,
+          yValueMapper: (Device data, _) => data.soFarConsumedEnergyInKwh,
+          name: '',
           color: const Color.fromRGBO(8, 142, 255, 1),
         )
       ],
@@ -131,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: [
         _getNow(),
-        _getHome(),
+        _getUsage(),
         _getDeviceUsage(),
         const Center(child: Text('Profile')),
       ].elementAt(_currentIndex), // Show the page according to the index
