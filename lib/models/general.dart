@@ -5,6 +5,13 @@ class EnergyData {
   final double units;
 }
 
+class BarChartData {
+  BarChartData(this.x, this.y);
+
+  final String x;
+  final double y;
+}
+
 class Device {
   String name;
   double soFarConsumedEnergyInKwh;

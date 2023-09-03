@@ -14,8 +14,19 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Device> _deviceList = Device.getDeviceList();
 
+  late List<BarChartData> data;
+  late TooltipBehavior _tooltip;
+
   @override
   void initState() {
+    data = [
+      BarChartData('CHN', 12),
+      BarChartData('GER', 15),
+      BarChartData('RUS', 30),
+      BarChartData('BRZ', 6.4),
+      BarChartData('IND', 14)
+    ];
+    _tooltip = TooltipBehavior(enable: true);
     super.initState();
   }
 
@@ -93,6 +104,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _getDeviceUsage() {
+    return SfCartesianChart(
+      primaryXAxis: CategoryAxis(),
+      primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
+      tooltipBehavior: _tooltip,
+      series: <ChartSeries<BarChartData, String>>[
+        BarSeries<BarChartData, String>(
+          dataSource: data,
+          xValueMapper: (BarChartData data, _) => data.x,
+          yValueMapper: (BarChartData data, _) => data.y,
+          name: 'Gold',
+          color: const Color.fromRGBO(8, 142, 255, 1),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: [
         _getNow(),
         _getHome(),
-        const Center(child: Text('Search')),
+        _getDeviceUsage(),
         const Center(child: Text('Profile')),
       ].elementAt(_currentIndex), // Show the page according to the index
       bottomNavigationBar: BottomNavigationBar(
