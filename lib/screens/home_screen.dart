@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import '../models/general.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,19 +14,49 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   // Define the list of pages to show according to the selected item
-  final List<Widget> _pages = [
-    const Center(child: Text('Home')),
-    const Center(child: Text('Search')),
-    const Center(child: Text('Profile')),
-  ];
+  List<Widget> _pages = [];
 
-  // Define the function to handle user taps on the items
+  @override
+  void initState() {
+    _pages = [
+      _getHome(),
+      const Center(child: Text('Search')),
+      const Center(child: Text('Profile')),
+    ];
+
+    super.initState();
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
-  
+
+  Widget _getHome() {
+    return Center(
+      child: Container(
+        child: SfCartesianChart(
+          // Initialize category axis
+          primaryXAxis: CategoryAxis(),
+          series: <LineSeries<SalesData, String>>[
+            LineSeries<SalesData, String>(
+                // Bind data source
+                dataSource: <SalesData>[
+                  SalesData('Jan', 35),
+                  SalesData('Feb', 28),
+                  SalesData('Mar', 34),
+                  SalesData('Apr', 32),
+                  SalesData('May', 40)
+                ],
+                xValueMapper: (SalesData sales, _) => sales.year,
+                yValueMapper: (SalesData sales, _) => sales.sales)
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
