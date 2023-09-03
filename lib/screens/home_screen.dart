@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _getNow() {
     return ListView.builder(
       itemCount: _deviceList.length,
+      padding: const EdgeInsets.only(bottom: 50),
       itemBuilder: (context, index) {
         final device = _deviceList[index];
         return Container(
@@ -111,6 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: Colors.grey,
         showSelectedLabels: true,
         showUnselectedLabels: true,
+        elevation: 5,
+        type: BottomNavigationBarType.fixed,
         items: const [
           // Define the items for the bottom navigation bar
           BottomNavigationBarItem(
@@ -118,16 +121,16 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Now',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.data_usage),
             label: 'Usage',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.list_alt),
+            label: 'devices',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
         currentIndex: _currentIndex, // Highlight the selected item
