@@ -46,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
           margin: const EdgeInsets.only(right: 10, left: 10, top: 10),
           decoration: BoxDecoration(
             color: (device.isON)
-                ? Colors.grey.withOpacity(0.8)
-                : Colors.grey.withOpacity(0.4),
+                ? Colors.grey.withOpacity(0.5)
+                : Colors.grey.withOpacity(0.3),
             borderRadius: const BorderRadius.all(
               Radius.circular(10),
             ),
@@ -56,12 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text(
               device.name,
               style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
+                  color: Colors.deepPurple,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
-              '${device.soFarConsumedEnergyInKwh} Kwh consumed',
+              '${device.soFarConsumedEnergyInKwh} Kwh consumed ${device.isON ? '(Running)' : '(Off)'}',
               style: TextStyle(
                 color: Colors.black.withOpacity(0.7),
                 fontSize: 12,
@@ -135,6 +135,64 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _getSettings() {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.device_hub),
+              label: const Text('Add New Applience'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.all(15)),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.delete_forever),
+              label: const Text('Remove Applience'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.all(15)),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.reset_tv),
+              label: const Text('Reset Applience'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.all(15)),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.power_off),
+              label: const Text('Shutdown all'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.all(15)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _getNow(),
         _getUsage(),
         _getDeviceUsage(),
-        const Center(child: Text('Profile')),
+        _getSettings(),
       ].elementAt(_currentIndex), // Show the page according to the index
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.deepPurple,
