@@ -13,6 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Define the index of the currently selected item
   int _currentIndex = 0;
   final List<Device> _deviceList = Device.getDeviceList();
+  bool _isAutoControllOn = false;
 
   //late List<BarChartData> data;
   late TooltipBehavior _tooltip;
@@ -37,47 +38,82 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _getNow() {
-    return ListView.builder(
-      itemCount: _deviceList.length,
-      padding: const EdgeInsets.only(bottom: 50),
-      itemBuilder: (context, index) {
-        final device = _deviceList[index];
-        return Container(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
           margin: const EdgeInsets.only(right: 10, left: 10, top: 10),
-          decoration: BoxDecoration(
-            color: (device.isON)
-                ? Colors.grey.withOpacity(0.5)
-                : Colors.grey.withOpacity(0.3),
-            borderRadius: const BorderRadius.all(
+          padding: const EdgeInsets.all(15),
+          decoration: const BoxDecoration(
+            color: Colors.deepPurple,
+            borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
           ),
-          child: ListTile(
-            title: Text(
-              device.name,
-              style: const TextStyle(
-                  color: Colors.deepPurple,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              '${device.soFarConsumedEnergyInKwh} Kwh consumed ${device.isON ? '(Running)' : '(Off)'}',
+          child: SwitchListTile(
+            title: const Text(
+              'Auto Controll',
               style: TextStyle(
-                color: Colors.black.withOpacity(0.7),
-                fontSize: 12,
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            trailing: Switch(
-              value: _deviceList[index].isON,
-              onChanged: (value) {
-                setState(() {
-                  _deviceList[index].isON = value;
-                });
-              },
-            ),
+            value: _isAutoControllOn,
+            activeColor: Colors.white,
+            onChanged: (value) {
+              setState(() {
+                _isAutoControllOn = !_isAutoControllOn;
+              });
+            },
           ),
-        );
-      },
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _deviceList.length,
+            padding: const EdgeInsets.only(bottom: 50),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final device = _deviceList[index];
+              return Container(
+                margin: const EdgeInsets.only(right: 10, left: 10, top: 10),
+                decoration: BoxDecoration(
+                  color: (device.isON)
+                      ? Colors.grey.withOpacity(0.5)
+                      : Colors.grey.withOpacity(0.3),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                child: ListTile(
+                  title: Text(
+                    device.name,
+                    style: const TextStyle(
+                        color: Colors.deepPurple,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    '${device.soFarConsumedEnergyInKwh} Kwh consumed ${device.isON ? '(Running)' : '(Off)'}',
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.7),
+                      fontSize: 12,
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: _deviceList[index].isON,
+                    onChanged: (value) {
+                      setState(() {
+                        _deviceList[index].isON = value;
+                      });
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
