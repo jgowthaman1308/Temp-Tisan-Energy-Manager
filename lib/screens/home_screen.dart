@@ -1,3 +1,4 @@
+import 'package:energy_manager/api/syncs/predict_sync.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../models/general.dart';
@@ -29,6 +30,18 @@ class _HomeScreenState extends State<HomeScreen> {
     // ];
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
+
+    _fetchDataFromRemote();
+  }
+
+  Future<void> _fetchDataFromRemote() async {
+    final sync = PredictSync();
+
+    final predicts = await sync.getPredictValues();
+
+    final device = await sync.getDeviceImages();
+
+    final recommends = await sync.getRecommend();
   }
 
   void _onItemTapped(int index) {
